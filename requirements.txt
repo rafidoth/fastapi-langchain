@@ -1,0 +1,9 @@
+transformers
+langchain
+fastapi
+uvicorn
+langchain-groq
+python-multipart
+dotenv
+groq
+websockets
