@@ -27,8 +27,8 @@ class GroqTranscriptResponse(BaseModel):
 
 async def transcribe_audio(audio_bytes : bytes , prompt : str):
     if not GROQ_API_KEY:
-        raise Exception("GROQ_API_KEY not set.")
-    else :
+        raise HTTPException(status_code=500, detail="GROQ_API_KEY not set.")
+    try:
         # audio_bytes = await file.read()
         audio_file = io.BytesIO(audio_bytes)
         audio_file.name = "aud.webm"
@@ -43,6 +43,9 @@ async def transcribe_audio(audio_bytes : bytes , prompt : str):
         response_text = transcription.text
         response_request_id = transcription.x_groq['id']
         return GroqTranscriptResponse(text=response_text, request_id=response_request_id)
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
 
 # class State(BaseModel):
 #     x : float = 0.0
@@ -92,18 +95,15 @@ class ConnectionManager:
         ws = self.connections[id]
         transcriptions = self.transcriptions[id]
         messages = []
-
         for transcription in transcriptions:
             messages.append({
                 'role': 'user',
                 'content': transcription.text,
             })
-
         await ws.send_json({
-            'messages': messages  
+            'messages': messages,
         })
-
-        print("Sent back transcript to", self.users[id])
+        print("Sent back transcript to ", self.users[id])
     
     async def disconnect(self, id : str ):
         await self.connections[id].close()
