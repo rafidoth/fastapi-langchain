@@ -5,6 +5,10 @@ uvicorn
 langchain-groq
 python-multipart
 dotenv
-groq
 websockets
 aiofiles
+soundfile
+pydub
+audioop-lts
+openai
+

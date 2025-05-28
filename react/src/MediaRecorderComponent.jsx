@@ -7,13 +7,14 @@ function MediaRecorderComponent({ username }) {
   const mediaRecorder = useRef(null);
   const stream = useRef(null);
   const [receivedMessages, setReceivedMessages] = useState([]);
-  const delay = 5000; // 5 seconds
+  const delay = 3000; // 5 seconds
 
   const startListening = async () => {
     try {
       stream.current = await navigator.mediaDevices.getUserMedia({
         audio: true,
       });
+
       mediaRecorder.current = new MediaRecorder(stream.current);
 
       // const chunks = [];
@@ -58,6 +59,7 @@ function MediaRecorderComponent({ username }) {
       console.log("Parsed response:", response);
       setReceivedMessages(response.messages || []);
     };
+
     ws.current.onclose = () => {
       console.log("WebSocket connection closed");
     };
