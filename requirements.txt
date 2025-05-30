@@ -2,7 +2,8 @@ transformers
 langchain
 fastapi
 uvicorn
-langchain-groq
+langchain-openai
+langchain-community
 python-multipart
 dotenv
 websockets

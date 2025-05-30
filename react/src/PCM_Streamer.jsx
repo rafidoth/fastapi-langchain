@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
+import { getControlMessage } from "./utils";
 
 function PCMStreamer({ username }) {
   const ws = useRef(null);
@@ -61,6 +62,9 @@ function PCMStreamer({ username }) {
     if (stream.current)
       stream.current.getTracks().forEach((track) => track.stop());
     setRecordingStatus("stopped");
+    if (ws.current?.readyState === 1) {
+      ws.current.send(getControlMessage("done_talking"));
+    }
   };
 
   const resetStreaming = () => {
